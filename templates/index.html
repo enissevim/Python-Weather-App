@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div id="weatherInput">
+            <h1>Weather App</h1>
+            <form onsubmit="event.preventDefault(); getWeather();">
+                <label for="cityInput">Enter city: </label>
+                <input type="text" id="cityInput" placeholder="e.g., San Francisco">
+                <button type="submit">Get Weather</button>
+            </form>
+        </div>
+        <div id="weatherOutput" style="display: none;">
+            <div id="location"></div>
+            <div id="dateTime"></div>
+            <div id="weatherResult"></div>
+            <div id="temperature"></div>
+            <div id="unitSwitch"></div>
+            <button id="newCityButton" onclick="backToInput()">Enter New City</button>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
