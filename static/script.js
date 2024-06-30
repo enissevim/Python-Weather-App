@@ -3,7 +3,7 @@ async function getWeather() {
     const cityName = capitalizeFirstLetter(cityInput.value.trim());
 
     if (!cityName) {
-        alert('Please enter a city name');
+        document.getElementById('error').innerText = 'Please enter a city name';
         return;
     }
 
@@ -17,24 +17,63 @@ async function getWeather() {
         });
 
         const data = await response.json();
-        const weatherOutput = document.getElementById('weatherOutput');
-        const weatherInput = document.getElementById('weatherInput');
+        console.log(data); // Log the response data
 
         if (data.hasOwnProperty('error')) {
-            alert(data.error);
+            document.getElementById('error').innerText = data.error;
         } else {
-            weatherOutput.style.display = 'block';
-            weatherInput.style.display = 'none';
+            document.getElementById('error').innerText = '';
+            document.getElementById('weatherOutput').style.display = 'block';
+            document.getElementById('weatherInput').style.display = 'none';
 
             document.getElementById('location').innerHTML = `<h2>${capitalizeFirstLetter(cityName)}</h2>`;
             document.getElementById('dateTime').innerHTML = `<p>${getDateTime()}</p>`;
             document.getElementById('weatherResult').innerHTML = `<p>${getWeatherDescription(data.weather)}</p>`;
             updateTemperature(data.temp, 'imperial');
-            createUnitToggle(data.unit);
+            createUnitToggle('imperial');
+
+            // Update background based on weather
+            updateBackground(data.weather);
         }
     } catch (error) {
         console.error('Error fetching weather data', error);
+        document.getElementById('error').innerText = 'Error fetching weather data';
     }
+}
+
+function updateBackground(weather) {
+    const body = document.body;
+
+    switch (weather.toLowerCase()) {
+        case 'clouds':
+            body.style.backgroundImage = 'url("/static/Partly-Cloudy.jpg")';
+            break;
+        case 'rain':
+            body.style.backgroundImage = 'url("/static/Rainy.avif")';
+            break;
+        case 'snow':
+            body.style.backgroundImage = 'url("/static/Snow.png")';
+            break;
+        case 'clear':
+            body.style.backgroundImage = 'url("/static/Sunny.png")';
+            break;
+        default:
+            body.style.backgroundImage = 'url("/static/default-background.jpg")'; // Default background
+            break;
+    }
+}
+
+function backToInput() {
+    const weatherOutput = document.getElementById('weatherOutput');
+    const weatherInput = document.getElementById('weatherInput');
+
+    weatherOutput.style.display = 'none';
+    weatherInput.style.display = 'block';
+
+    document.getElementById('cityInput').value = '';
+
+    // Reset background to default
+    document.body.style.backgroundImage = 'url("/static/wvNCf.png")';
 }
 
 function updateTemperature(temp, unit) {
@@ -71,16 +110,6 @@ function toggleUnit() {
     }
 }
 
-function hideSwitchButton() {
-    const unitSwitch = document.getElementById('unitSwitch');
-    unitSwitch.style.display = 'none';
-}
-
-function showSwitchButton() {
-    const unitSwitch = document.getElementById('unitSwitch');
-    unitSwitch.style.display = 'block';
-}
-
 function convertToFahrenheit(celsiusTemp) {
     return (celsiusTemp * 9/5) + 32;
 }
@@ -112,14 +141,4 @@ function getDateTime() {
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function backToInput() {
-    const weatherOutput = document.getElementById('weatherOutput');
-    const weatherInput = document.getElementById('weatherInput');
-
-    weatherOutput.style.display = 'none';
-    weatherInput.style.display = 'block';
-
-    document.getElementById('cityInput').value = '';
 }

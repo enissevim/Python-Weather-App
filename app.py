@@ -11,7 +11,7 @@ def index():
 def get_weather():
     user_input = request.form.get("city")
 
-    api_key = '39f7a6bd731dfc4bb9398a2ff53cfdf2'
+    api_key = '9f3d1a6d6bff1debd605d70b343243e4'
     api_url = f"https://api.openweathermap.org/data/2.5/weather?q={user_input}&units=imperial&APPID={api_key}"
 
     try:
@@ -31,4 +31,4 @@ def get_weather():
     return jsonify(result)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

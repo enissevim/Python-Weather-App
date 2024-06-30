@@ -2,16 +2,23 @@ body {
     font-family: Arial, sans-serif;
     background-image: url('/static/wvNCf.png');
     background-size: cover;
+    background-position: center;
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    transition: background-image 0.3s ease; /* Smooth transition for background change */
 }
 
 .container {
     text-align: center;
     color: white;
+    z-index: 1; /* Ensure content is above background */
+}
+
+#error {
+    color: red;
 }
 
 #weatherInput {
